@@ -91,8 +91,8 @@ g_Ks_orig =  1.29411759999999987e-1 # KCNQ1 Kv7.1 channel
 g_Ca_L = (1 + 0.1*prrx1)*g_Ca_L_orig
 K_rel = (1 - 0.1*prrx1)*K_rel_orig
 g_Na = (1 + 0.4*prrx1)*g_Na_orig
-g_Kr = (1 + 0.25)*g_Kr_orig
-g_Ks = (1 + 0.05)*g_Ks_orig
+g_Kr = (1 + 0.25*prrx1)*g_Kr_orig
+g_Ks = (1 + 0.05*prrx1)*g_Ks_orig
 
 [Ca_buffers]
 CMDN_max = 0.05
