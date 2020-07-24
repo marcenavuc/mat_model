@@ -84,13 +84,15 @@ g_Na_orig = 7.8 # SCN5A Nav1.5 channel
     in [mS/uF]
 g_Kr_orig =  2.94117649999999994e-2 # KCNH2 Kv11.1 channel
     in [mS/uF]
+g_Ks_orig =  1.29411759999999987e-1 # KCNQ1 Kv7.1 channel
+    in [mS/uF]
 
 
 g_Ca_L = (1 + 0.1*prrx1)*g_Ca_L_orig
 K_rel = (1 - 0.1*prrx1)*K_rel_orig
 g_Na = (1 + 0.4*prrx1)*g_Na_orig
 g_Kr = (1 + 0.25)*g_Kr_orig
-
+g_Ks = (1 + 0.05)*g_Ks_orig
 
 [Ca_buffers]
 CMDN_max = 0.05
@@ -461,14 +463,18 @@ import matplotlib.pyplot as plt
 import myokit
 import numpy as np
 import time
+from os.path import join
 print(myokit.DIR_CFUNC)
+
+IMAGE_DIR = 'imgs/'
+IMAGE_FORMAT = '.png'
 
 # Get model and protocol, create simulation
 m = get_model()
 p = get_protocol()
 
 # MOD
-m.set_value('PRRX1.prrx1', 0)
+m.set_value('PRRX1.prrx1', 1)
 
 # Create a simulation
 s = myokit.Simulation(m, p, apd_var='membrane.V')
@@ -487,8 +493,9 @@ vt = 0.9 * s.state()[indice]
 log, apds = s.run(5 * 1000, apd_threshold=vt)
 
 # Show results
+title = f'PRRX1 = {m.value("PRRX1.prrx1")} After changed g_Ks'
 plt.figure()
-plt.title('APDs in LR-1991')
+plt.title(title)
 plt.plot(log['environment.time'], log['membrane.V'])
 for i, start in enumerate(apds['start']):
     duration = apds['duration'][i]
@@ -496,4 +503,5 @@ for i, start in enumerate(apds['start']):
         length_includes_head=True)
     plt.text(start + 40, vt-10, str(int(duration)) + ' ms')
 plt.show()
+plt.savefig(join(IMAGE_DIR, title + IMAGE_FORMAT))
 
