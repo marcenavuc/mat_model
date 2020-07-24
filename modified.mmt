@@ -76,17 +76,20 @@ intracellular_ion_concentrations.Ca_rel           = 1.488
 
 [PRRX1]
 prrx1 = 0  # 0 - disabled, 1 - enabled
-g_Ca_L_orig = 0.12375
+g_Ca_L_orig = 0.12375 # CACNA1 Ca_L channel
     in [mS/uF]
-K_rel_orig = 30
+K_rel_orig = 30 # RYR2 Ryr channel
     in [mS/uF]    
-g_Na_orig = 7.8
+g_Na_orig = 7.8 # SCN5A Nav1.5 channel
     in [mS/uF]
+g_Kr_orig =  2.94117649999999994e-2 # KCNH2 Kv11.1 channel
+    in [mS/uF]
+
 
 g_Ca_L = (1 + 0.1*prrx1)*g_Ca_L_orig
 K_rel = (1 - 0.1*prrx1)*K_rel_orig
 g_Na = (1 + 0.4*prrx1)*g_Na_orig
-
+g_Kr = (1 + 0.25)*g_Kr_orig
 
 
 [Ca_buffers]
@@ -465,7 +468,7 @@ m = get_model()
 p = get_protocol()
 
 # MOD
-m.set_value('PRRX1.prrx1', 1)
+m.set_value('PRRX1.prrx1', 0)
 
 # Create a simulation
 s = myokit.Simulation(m, p, apd_var='membrane.V')
